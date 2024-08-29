@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { getAllEmpleados } from '../api/empleados.api';
 
+
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
@@ -8,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [empleados,setEmpleados] = useState()
   const [usuarioLogueado, setUsuarioLogueado] = useState(null);
   const [userRole, setUserRole] = useState(null);
+
 
   useEffect(()=>{
     async function loadEmpleados(){

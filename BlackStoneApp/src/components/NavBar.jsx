@@ -1,11 +1,13 @@
 import { AppBar, Box, Button, Container, Toolbar, Tooltip, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 export const NavBar = () => {
-    const managerPages = ['Gestionar', 'Asignar'];
+    const managerPages = ['Revisar','Gestionar', 'Asignar','Registrar'];
     const agentePages = ['Revisar','Registrar'];
-    const { usuarioLogueado,userRole, logout } = useAuth();  // Asegúrate de que isAuthenticated se obtiene correctamente
+    const { usuarioLogueado,userRole, logout } = useAuth();
+    const navigate = useNavigate()  // Asegúrate de que isAuthenticated se obtiene correctamente
     let pages = [];
 
     if (userRole === 'manager') {

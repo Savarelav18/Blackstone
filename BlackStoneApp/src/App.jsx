@@ -5,6 +5,8 @@ import { Inicio } from './pages/inicio'
 import { LoginPage } from './pages/Login'
 import { Registrar } from './pages/registrar'
 import { Revisar } from './pages/Revisar'
+import { Asignar } from './pages/Asignar'
+import { Gestionar } from './pages/Gestionar'
 
 
 function App() {
@@ -17,7 +19,9 @@ function App() {
         <Route path="/" element={<Inicio/>}/>
         <Route path="/Login" element={<LoginPage/>}/>
         <Route path="/registrar" element={<Registrar/>}/>
+        <Route path="/gestionar" element={<Gestionar/>}/>
         <Route path="/revisar" element={<Revisar/>}/>
+        <Route path="/asignar" element={<Asignar/>}/>
       </Routes>
     </BrowserRouter>
       

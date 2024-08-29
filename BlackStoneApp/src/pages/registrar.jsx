@@ -13,6 +13,7 @@ export const Registrar = () => {
 
   const onSubmit = handleSubmit(async data =>{
     const res= await createPaciente(data)
+    console.log(res)
     if (res.status != 200 || res.status != 201){
         setMensaje("Ups. no fue posible registrar el usuario")
     }
@@ -82,6 +83,29 @@ export const Registrar = () => {
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
                 {...register("historiaMedica",{required:true})}
+                required
+              />
+
+              <TextField
+                name="doctor"
+                type="text"
+                fullWidth
+                label="Doctor"
+                sx={{ mt: 2, mb: 2.5 }}
+                margin="normal"
+                {...register("doctor",{required:true})}
+                required
+              />
+
+              <TextField
+                name="empleado"
+                type="text"
+                fullWidth
+                label="Empleado"
+                sx={{ mt: 2, mb: 2.5 }}
+                margin="normal"
+                {...register("empleado",{required:true})}
+                value={3}
                 required
               />
               <Button
