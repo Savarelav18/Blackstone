@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "coreapi",
     "pacientes",
     "empleados",
+    "django_filters",
 ]
 
 MIDDLEWARE = [

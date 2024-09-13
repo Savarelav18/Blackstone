@@ -29,3 +29,16 @@ export const actualizarEstado = (pacienteid,parametro) =>{
 export const actualizarEstadoEmpleado = (empleadoId,parametro) =>{
     return EmpleadosApi.put(`/${empleadoId}/`,parametro)
 }
+
+export const asignarPacienteAEmpleado = async (pacienteId, empleadoId) => {
+    try {
+        // Realiza la solicitud PATCH al servidor
+        const response = await PacienteApi.patch(`${pacienteId}/`, {
+            empleado: empleadoId // Asume que la propiedad del empleado es `empleado`
+        });
+        return response;
+    } catch (error) {
+        console.error("Error al asignar el paciente:", error);
+        throw error;
+    }
+};

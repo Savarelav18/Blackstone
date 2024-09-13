@@ -4,7 +4,7 @@ from pacientes import views
 from rest_framework.documentation import include_docs_urls
 
 router = routers.DefaultRouter()
-router.register(r"paciente", views.PacienteView, "paciente")
+router.register(r"paciente", views.PacienteView, basename="paciente")
 
 urlpatterns = [
     path("api/v1/", include(router.urls)),
