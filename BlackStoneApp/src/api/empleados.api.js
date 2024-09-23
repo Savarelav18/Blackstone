@@ -5,8 +5,8 @@ const EmpleadosApi = axios.create({
 })
 
 const PacienteApi = axios.create({
-    baseURL:"http://127.0.0.1:8000/pacientes/api/v1/paciente/"
-})
+    baseURL: "http://127.0.0.1:8000/pacientes/api/v1/paciente/",
+});
 
 
 export const getAllEmpleados = () =>{
@@ -22,9 +22,21 @@ export const getPacientesAsignados = (empleado) =>{
     return PacienteApi.get(`http://127.0.0.1:8000/pacientes/api/v1/paciente/?empleado=${empleado}`)
 }
 
-export const actualizarEstado = (pacienteid,parametro) =>{
-    return PacienteApi.put(`/${pacienteid}/`,parametro)
-}
+export const actualizarEstadoFechaInicio = (pacienteid, nuevoEstado,fecha_inicio) => {
+    return PacienteApi.patch(`/${pacienteid}/`, { estadoOrden: nuevoEstado, fecha_inicio_atencion:fecha_inicio}, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
+export const actualizarEstadoFechaFin = (pacienteid, nuevoEstado,fecha_fin) => {
+    return PacienteApi.patch(`/${pacienteid}/`, { estadoOrden: nuevoEstado,fecha_fin_atencion:fecha_fin}, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+};
 
 export const actualizarEstadoEmpleado = (empleadoId,parametro) =>{
     return EmpleadosApi.put(`/${empleadoId}/`,parametro)

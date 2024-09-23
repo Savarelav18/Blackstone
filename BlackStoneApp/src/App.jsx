@@ -7,6 +7,7 @@ import { Registrar } from './pages/registrar'
 import { Revisar } from './pages/Revisar'
 import { Asignar } from './pages/Asignar'
 import { Gestionar } from './pages/Gestionar'
+import Estadisticas from './pages/Estadisticas'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/gestionar" element={<Gestionar/>}/>
         <Route path="/revisar" element={<Revisar/>}/>
         <Route path="/asignar" element={<Asignar/>}/>
+        <Route path="/estadisticas" element={<Estadisticas/>}/>
       </Routes>
     </BrowserRouter>
       

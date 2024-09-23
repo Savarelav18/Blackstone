@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 
 export const NavBar = () => {
-    const managerPages = ['Revisar','Gestionar', 'Asignar','Registrar'];
+    const managerPages = ['Revisar','Gestionar', 'Asignar','Registrar','Estadisticas'];
     const agentePages = ['Revisar','Registrar'];
     const { usuarioLogueado,userRole, logout } = useAuth();
     const navigate = useNavigate()  // Asegúrate de que isAuthenticated se obtiene correctamente
