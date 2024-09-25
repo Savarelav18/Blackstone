@@ -1,25 +1,56 @@
-import { Alert, Box, Button, Container, Grid, Paper,TextField, Typography } from "@mui/material";
-import {useForm} from "react-hook-form"
+import { Box, Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { createPaciente } from "../api/empleados.api";
 import { useNavigate } from "react-router-dom";
-
+import { toast, ToastContainer } from 'react-toastify'; // Importar Toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Registrar = () => {
-    const [mensaje, setMensaje] = useState(null);
-    const {register,handleSubmit} = useForm()
-    const navigate = useNavigate()
+  const { register, handleSubmit, reset } = useForm();
+  const navigate = useNavigate();
 
+  const notifyError = (message) => {
+    toast.error(message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+  };
 
-  const onSubmit = handleSubmit(async data =>{
-    const res= await createPaciente(data)
-    console.log(res)
-    if (res.status != 200 || res.status != 201){
-        setMensaje("Ups. no fue posible registrar el usuario")
+  const notifySuccess = (message) => {
+    toast.success(message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const res = await createPaciente(data);
+      if (res.status === 201) {
+        notifySuccess("Paciente registrado correctamente.");
+        reset(); // Limpiar el formulario
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Mostrar mensaje de error si el paciente ya existe
+        notifyError(error.response.data.detail || "Error al registrar paciente.");
+      } else {
+        notifyError("Ocurrió un error inesperado.");
+      }
     }
-    setMensaje("Se registró correctamente el usuario.")
-    navigate("/")
-  })
+  });
 
   return (
     <Container sx={{ mt: "auto" }} maxWidth="xl">
@@ -42,7 +73,7 @@ export const Registrar = () => {
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
                 required
-                {...register("nombre",{required:true})}
+                {...register("nombre", { required: true })}
               />
               <TextField
                 name="fechaNacimiento"
@@ -52,7 +83,7 @@ export const Registrar = () => {
                 placeholder="dd/mm/aaaa"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("fechaNacimiento",{required:true})}
+                {...register("fechaNacimiento", { required: true })}
                 required
               />
               <TextField
@@ -62,7 +93,7 @@ export const Registrar = () => {
                 label="Número de póliza"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("numeroPoliza",{required:true})}
+                {...register("numeroPoliza", { required: true })}
                 required
               />
               <TextField
@@ -72,7 +103,7 @@ export const Registrar = () => {
                 label="Número de seguro"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("numeroSeguro",{required:true})}
+                {...register("numeroSeguro", { required: true })}
                 required
               />
               <TextField
@@ -82,10 +113,9 @@ export const Registrar = () => {
                 label="Historia médica"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("historiaMedica",{required:true})}
+                {...register("historiaMedica", { required: true })}
                 required
               />
-
               <TextField
                 name="doctor"
                 type="text"
@@ -93,10 +123,9 @@ export const Registrar = () => {
                 label="Doctor"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("doctor",{required:true})}
+                {...register("doctor", { required: true })}
                 required
               />
-
               <TextField
                 name="empleado"
                 type="text"
@@ -104,7 +133,7 @@ export const Registrar = () => {
                 label="Empleado"
                 sx={{ mt: 2, mb: 2.5 }}
                 margin="normal"
-                {...register("empleado",{required:true})}
+                {...register("empleado", { required: true })}
                 value={3}
                 required
               />
@@ -117,14 +146,10 @@ export const Registrar = () => {
                 Registrar
               </Button>
             </Box>
-            {mensaje && (
-              <Alert severity={mensaje === 'Se registró correctamente el usuario.' ? 'success' : 'error'} sx={{ mt: 2 }}>
-                {mensaje}
-              </Alert>
-            )}
           </Paper>
         </Grid>
       </Grid>
+      <ToastContainer /> {/* Contenedor para las notificaciones de Toastify */}
     </Container>
   );
 };

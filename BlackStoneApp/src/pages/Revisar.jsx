@@ -10,6 +10,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export const Revisar = () => {
     const [pacientes, setPacientes] = useState([]);
     const { usuarioLogueado } = useAuth();
@@ -79,7 +82,6 @@ export const Revisar = () => {
         setOrdenAtendida(paciente.estadoOrden === "Atendida");
         setFechaSolicitudRevisada(fechaActual);
         setOpen(true);
-        console.log(selectedPacienteInfo)
         
     };
 
@@ -87,7 +89,31 @@ export const Revisar = () => {
         setOpen(false);
     };
 
+    const notifyInfo = (message) => {
+        toast.info(message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored"
+        });
+      };
+
     const onSubmit = handleSubmit(async (data) => {
+
+        if (!data.selectedPatient) {
+            notifyInfo("Por favor selecciona una orden para actualizar.");
+            return;
+        }
+
+        if (ordenEstado==="") {
+            notifyInfo("Por favor selecciona un estado.");
+            return;
+        }
+
         const fechaActual = new Date();
         const fechaFormateada = fechaActual.toISOString().split('.')[0]; // Formato ISO 8601 sin segundos
     
@@ -255,7 +281,6 @@ export const Revisar = () => {
                                 label="Estado"
                                 onChange={handleChangeSelection}
                                 fullWidth
-                                required
                                 style={{ marginTop: "2rem", backgroundColor: "white" }}
                             >
                                 <MenuItem value="Solicitud Enviada">Solicitud Enviada</MenuItem>
@@ -321,16 +346,14 @@ export const Revisar = () => {
                                 {selectedPacienteInfo.estadoOrden === "Sin iniciar" ? (
                                     <>
                                         {renderTimelineItem(
-                                            `Solicitud revisada por Registros médicos - ${fechaSolicitudRevisada || "Fecha pendiente"}`,
-                                            !!fechaSolicitudRevisada
+                                            `Solicitud revisada por Registros médicos - ${fechaSolicitudRevisada}`, !!fechaSolicitudRevisada
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Enviada - ${fechaSolicitudEnviada || "Fecha pendiente"}`,
-                                            !!fechaSolicitudAtendida
+                                            `Solicitud Enviada - Fecha pendiente`
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Atendida - ${fechaSolicitudAtendida || "Fecha pendiente"}`,
-                                            !!fechaSolicitudAtendida
+                                            `Solicitud Atendida - Fecha pendiente`,
+
                                         )}
                                     </>
                                 ) : selectedPacienteInfo.estadoOrden === "Solicitud Enviada" ? (
@@ -340,12 +363,12 @@ export const Revisar = () => {
                                             !!fechaSolicitudRevisada
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Enviada - ${fechaSolicitudEnviada || "Fecha pendiente"}`,
-                                            !!fechaSolicitudAtendida
+                                            `Solicitud Enviada - ${selectedPacienteInfo.fecha_inicio_atencion || "Fecha pendiente"}`,
+                                            !!selectedPacienteInfo.fecha_inicio_atencion
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Atendida - ${fechaSolicitudAtendida || "Fecha pendiente"}`,
-                                            !!fechaSolicitudAtendida
+                                            `Solicitud Atendida - Fecha pendiente`,
+                                            
                                         )}
                                     </>
                                 ) : selectedPacienteInfo.estadoOrden === "Atendida" ? (
@@ -355,11 +378,11 @@ export const Revisar = () => {
                                             !!fechaSolicitudRevisada
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Enviada - ${fechaSolicitudEnviada || "Fecha pendiente"}`,
+                                            `Solicitud Enviada - ${selectedPacienteInfo.fecha_inicio_atencion || "Fecha pendiente"}`,
                                             true
                                         )}
                                         {renderTimelineItem(
-                                            `Solicitud Atendida - ${fechaSolicitudAtendida || "Fecha pendiente"}`,
+                                            `Solicitud Atendida - ${selectedPacienteInfo.fecha_fin_atencion || "Fecha pendiente"}`,
                                             true
                                         )}
                                     </>
@@ -372,6 +395,7 @@ export const Revisar = () => {
                     <Button onClick={handleClose}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
+            <ToastContainer />
         </>
     );
 };

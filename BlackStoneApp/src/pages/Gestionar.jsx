@@ -8,6 +8,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const Gestionar = () =>{
@@ -25,6 +27,19 @@ export const Gestionar = () =>{
     const handleChangeSelection = (event) => {
         setRol(event.target.value);
     };
+
+    const notifyInfo = (message) => {
+        toast.info(message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored"
+        });
+      };
 
     
 
@@ -56,12 +71,23 @@ export const Gestionar = () =>{
     };
 
     const onSubmit = handleSubmit(async (data) =>{
-        const res= await actualizarEstadoEmpleado(data.selectedEmpleado[0].id,data.selectedEmpleado.map(empleado => ({...empleado,rol: rol}))[0])
-        console.log(res)
-        if (res.status != 200 || res.status != 201){
-            setMensaje("Ups. no fue posible registrar el usuario")
+        if (!data.selectedEmpleado) {
+            notifyInfo("Por favor selecciona un empleado para actualizar.");
+            return;
         }
-        setMensaje("Se actualizó correctamente el estado de la orden.")
+
+        if (rol==="") {
+            notifyInfo("Por favor selecciona un rol.");
+            return;
+        }
+    
+        const res = await actualizarEstadoEmpleado(data.selectedEmpleado[0].id, data.selectedEmpleado.map(empleado => ({ ...empleado, rol: rol }))[0]);
+    
+        if (res.status !== 200 && res.status !== 201) {
+            setMensaje("Ups. no fue posible registrar el usuario");
+        } else {
+            setMensaje("Se actualizó correctamente el estado de la orden.");
+        }
 
         
     })
@@ -147,7 +173,6 @@ export const Gestionar = () =>{
                 label="Age"
                 onChange={handleChangeSelection}
                 fullWidth
-                required
                 style={{marginTop:"2rem" , backgroundColor:"white"}}
                 >
                 <MenuItem value="agente">agente</MenuItem>
@@ -164,6 +189,7 @@ export const Gestionar = () =>{
             </Stack>
         </Box>
         </Stack>
+        <ToastContainer />
         
         </Box>
     </>
